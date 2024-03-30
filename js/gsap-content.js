@@ -359,11 +359,11 @@ document.addEventListener('DOMContentLoaded', function () {
         bgVideo.loop = true;
       },
       onLeave: () => {
-        bgVideo.pause();
+        //bgVideo.pause();
         bgVideo.loop = false;
       },
       onLeaveBack: () => {
-        bgVideo.pause();
+        //bgVideo.pause();
         bgVideo.loop = false;
       }
     }

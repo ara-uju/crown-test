@@ -848,6 +848,7 @@ h2.this-my-fashion.regular {
 .window-container.handong-exe {
 	opacity: 0;
 	position: relative;
+	margin: auto;
 }
 
 .window-container.handong-exe video {
