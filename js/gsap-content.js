@@ -10,9 +10,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const videoList = document.querySelectorAll("video");
 
-  videoList.forEach((videoEl) => {
+  videoList.forEach((videoEl, i) => {
     videoEl.addEventListener("loadeddata", function () {
-      console.log("loaded " + videoEl + " of /" + videoList.length);
+      videoEl.play();
+      let pauseWait = setTimeout(() => {
+        videoEl.pause();
+        clearTimeout(pauseWait);
+      }, 1500);
+      console.log("loaded video #" + i + " of /" + videoList.length);
     });
   });
 
@@ -49,8 +54,10 @@ document.addEventListener('DOMContentLoaded', function () {
     scrub: 1,
     pin: true,
     onEnter: () => {
-      document.querySelector("#desktop").classList.add("hide");
-      ScrollTrigger.refresh();
+      if (docReady) {
+        document.querySelector("#desktop").classList.add("hide");
+        ScrollTrigger.refresh();
+      }
     },
     onUpdate: (self) => {
       let index = Math.floor(self.progress * (ootdFontList.length - 1));
@@ -176,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
       yPercent: 200,
       duration: .8,
       ease: "power3.out",
-      onComplete: ()=> {
+      onComplete: () => {
         document.querySelector(".this-my-fashion-section").classList.remove("white-bg");
       }
     })
@@ -197,12 +204,15 @@ document.addEventListener('DOMContentLoaded', function () {
       markers: false
     }
   })
+    .from(".horizontal-progress-bar .progress-bar-inner", {
+      width: "0%"
+    })
     .from(".shut-up", {
       opacity: 0,
       x: "25%",
       duration: .1,
       ease: "power3.out"
-    })
+    }, "<")
     .fromTo(".shut-up span", {
       opacity: 0,
       x: "25%"
@@ -286,13 +296,65 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-  gsap.timeline({
+  // indicates the index of the first video (of a group of 3) that is in view and therefore should be playing
+  // following two videos in group have indexes [videoScrollIndex+1] and [videoScrollIndex+2]
+  let videoScrollIndex = 0;
+
+  // controll var, ensures blocks of code don't run unnecessarily
+  let shiftVideos = false;
+
+  // check which set of videos should be playing
+  function videoPlayChecker() {
+    document.querySelectorAll(".bg-img-container video").forEach((vid, i) => {
+      if (i >= videoScrollIndex && i <= (videoScrollIndex + 2)) {
+        vid.play();
+      } else {
+        vid.pause();
+      }
+      shiftVideos = !shiftVideos;
+    });
+  }
+
+  function pauseAll() {
+    document.querySelectorAll(".bg-img-container video").forEach((vid) => {
+      vid.pause();
+      shiftVideos = !shiftVideos;
+    });
+  }
+
+  let scrollTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: ".single-word-section",
       start: "top top",
       end: "+=700%",
       toggleActions: "play resume play reverse",
-      scrub: true
+      scrub: true,
+      onEnter: () => {
+        shiftVideos = true;
+      },
+      onUpdate: () => {
+
+        if (scrollTimeline.progress() <= 0.18 && shiftVideos) {
+          videoScrollIndex = 0;
+          videoPlayChecker();
+        } else if (scrollTimeline.progress() <= 0.28 && scrollTimeline.progress() > 0.18 && !shiftVideos) {
+          videoScrollIndex = 1;
+          videoPlayChecker();
+        } else if (scrollTimeline.progress() <= 0.42 && scrollTimeline.progress() > 0.28 && shiftVideos) {
+          videoScrollIndex = 2;
+          videoPlayChecker();
+        } else if (scrollTimeline.progress() <= 0.56 && scrollTimeline.progress() > 0.42 && !shiftVideos) {
+          videoScrollIndex = 3;
+          videoPlayChecker();
+        } else if (scrollTimeline.progress() > 0.56 && scrollTimeline.progress() < 0.7 && shiftVideos) {
+          videoScrollIndex = 4;
+          videoPlayChecker();
+        } else if (scrollTimeline.progress() >= 0.7 && !shiftVideos) {
+          pauseAll();
+        }
+
+        console.log("playing videos " + videoScrollIndex + " - " + (videoScrollIndex + 2));
+      }
     }
   })
     .fromTo(".bg-img-container", {
@@ -309,34 +371,6 @@ document.addEventListener('DOMContentLoaded', function () {
         xPercent: 0,
         //stagger: .25,
       }, "<");
-
-  // Horizontal slide wrapper (video)
-  /*var videoSections = document.querySelectorAll(".bg-img-slide-wrapper .bg-img-container video");
-  videoSections.forEach((videoS) => {
-
-    const videoWidth = videoS.offsetWidth;
-
-    ScrollTrigger.create({
-      trigger: videoS,
-      start: "top bottom",
-      end: `bottom+=${videoWidth} top-=${videoWidth}`,
-      onEnter: () => {
-        videoS.play();
-        console.log(videoS);
-        console.log(videoS.querySelector("video"));
-      },
-      onEnterBack: () => {
-        videoS.play();
-      },
-      onLeave: () => {
-        videoS.pause();
-      },
-      onLeaveBack: () => {
-        videoS.pause();
-      }
-    });
-  });*/
-
 
   // VERTICAL SCROLLER
   // Content enter - stripes - popup - bg video
@@ -453,7 +487,7 @@ document.addEventListener('DOMContentLoaded', function () {
       pin: ".container-inner-action",
       toggleActions: "play resume play resume",
       scrub: true,
-      onLeave: ()=> {
+      onLeave: () => {
         document.querySelector(".clap-bg").classList.remove("show");
       },
       onLeaveBack: () => {
@@ -529,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function () {
       scrub: true
     }
   })
-    .from(".progress-bar-inner", {
+    .from(".progress-bar .progress-bar-inner", {
       height: "0%"
     });
 
@@ -622,9 +656,9 @@ document.addEventListener('DOMContentLoaded', function () {
       toggleActions: "play reverse play reverse",
       scrub: 1,
       onUpdate: function (self) {
-        if (self.progress <= .44) {
+        if (self.progress <= .42) {
           document.querySelector(".crown-video-message").innerHTML = "only the crown";
-        } else if (self.progress > .44 && self.progress <= .56) {
+        } else if (self.progress > .42 && self.progress <= .56) {
           document.querySelector(".crown-video-message").innerHTML = "can determine";
         } else {
           document.querySelector(".crown-video-message").innerHTML = "fate";

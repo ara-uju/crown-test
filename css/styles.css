@@ -149,6 +149,10 @@ body {
 	overflow-x: clip;
 }
 
+.no-overflow {
+	overflow: hidden !important;
+}
+
 section {
 	min-height: 100svh;
 	max-width: 100vw;
@@ -810,7 +814,8 @@ h2.this-my-fashion.regular {
 }
 
 /***** OOTD SCROLLER *****/
-.progress-bar {
+.progress-bar,
+.horizontal-progress-bar {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -818,12 +823,23 @@ h2.this-my-fashion.regular {
 	width: 6px;
 }
 
-.progress-bar .progress-bar-inner {
+.horizontal-progress-bar {
+	height: 6px;
+	width: 100vw;
+}
+
+.progress-bar .progress-bar-inner,
+.horizontal-progress-bar .progress-bar-inner {
 	position: relative;
 	width: 100%;
 	top: 0;
 	height: 100%;
-	background-color: green;
+	background-color: #2bbe34;
+}
+
+.horizontal-progress-bar .progress-bar-inner {
+	background-color: #2bbe34;
+	height: 6px;
 }
 
 .scroller-container {

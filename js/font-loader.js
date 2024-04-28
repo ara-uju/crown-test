@@ -1,4 +1,5 @@
-console.clear();
+//console.clear();
+let docReady = false;
 document.addEventListener('DOMContentLoaded', function () {
 
     const fontName = ["DM Serif Display", "Jost", "Rubik Glitch Pop", "Climate Crisis", "Dancing Script", "Pixelify Sans", "Oswald", "Paytone One", "Passion One", "Noto Sans Display", "Noto Sans KR"];
@@ -20,15 +21,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     // All fonts were loaded
                     console.log("all fonts were loaded - removing preloader");
 
-                    window.scrollTo(0, 0);
-
                     // LOADER
                     gsap.timeline().to(".preloader", {
                         opacity: 0,
                         delay: 1.5,
                         duration: 2,
+                        onStart: () => {
+                            window.scroll({
+                                top: 0,
+                                behavior: 'instant',
+                            });
+                            
+                            docReady = true;
+                        },
                         onComplete: () => {
                             document.querySelector(".preloader").remove();
+                            document.querySelector("body").classList.remove("no-overflow");
                         }
                     }).fromTo(".popup-container .popup-el", {
                         yPercent: 100,
