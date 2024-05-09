@@ -405,6 +405,39 @@ button {
 	padding-top: 1rem;
 }
 
+.border-menu.bottom-row .menu-footer {
+	color: rgb(200, 200, 200);
+    position: absolute;
+    bottom: 2.4rem;
+    left: 0;
+    right: 0;
+    display: flex;
+	justify-content: center;
+    font-size: 1.2rem;
+	visibility: hidden;
+	opacity: 0;
+	transition: all .4s ease;
+}
+
+.border-menu.bottom-row .menu-footer p {
+	background-color: rgb(25, 25, 25);
+	text-align: center;
+}
+
+.border-menu.bottom-row .menu-footer a {
+	text-decoration: underline;
+}
+
+.border-menu.bottom-row .menu-footer a,
+.border-menu.bottom-row .menu-footer span {
+	color: rgb(225, 225, 225);
+}
+
+.show-menu .border-menu.bottom-row .menu-footer {
+    visibility: visible;
+	opacity: .9;
+}
+
 .border-menu .text-container {
 	cursor: pointer;
 	display: flex;
@@ -418,10 +451,13 @@ button {
 	font-weight: bold;
 }
 
-.info-about p {
+.info-about p,
+.info-about a {
 	color: #FFF;
 	background-color: #000;
 	opacity: .85;
+	padding: 0 4px;
+	padding-right: 8px;
 }
 
 .info-about {
@@ -448,6 +484,12 @@ button {
 
 .info-about a {
 	opacity: .9;
+	display: flex;
+	align-items: center;
+}
+
+.info-about a:hover {
+	text-decoration: underline;
 }
 
 @media screen and (max-width: 480px) {
@@ -1342,6 +1384,7 @@ h1,
 	width: 100%;
 	align-items: center;
 	justify-content: center;
+	mix-blend-mode: color-dodge;
 }
 
 .crown-video {

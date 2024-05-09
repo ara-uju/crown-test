@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         videoEl.pause();
         clearTimeout(pauseWait);
       }, 1500);
-      console.log("loaded video #" + i + " of /" + videoList.length);
+      //console.log("loaded video #" + i + " of /" + videoList.length);
     });
   });
 
@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
           pauseAll();
         }
 
-        console.log("playing videos " + videoScrollIndex + " - " + (videoScrollIndex + 2));
+        //console.log("playing videos " + videoScrollIndex + " - " + (videoScrollIndex + 2));
       }
     }
   })

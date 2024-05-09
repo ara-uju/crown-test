@@ -2,6 +2,14 @@
 let docReady = false;
 document.addEventListener('DOMContentLoaded', function () {
 
+    const date = new Date();
+    const hour = date.getHours();
+    const min = date.getMinutes();
+
+    document.querySelectorAll(".time").forEach((timeEl)=> {
+        timeEl.innerHTML = hour + ":" + min;
+    });
+
     const fontName = ["DM Serif Display", "Jost", "Rubik Glitch Pop", "Climate Crisis", "Dancing Script", "Pixelify Sans", "Oswald", "Paytone One", "Passion One", "Noto Sans Display", "Noto Sans KR"];
 
     imagesLoaded(document.querySelectorAll('img'), function () {
@@ -10,16 +18,16 @@ document.addEventListener('DOMContentLoaded', function () {
         var fontLoader = new FontLoader(fontName, {
             "fontLoaded": function (font) {
                 // One of the fonts was loaded
-                console.log("font loaded: " + font.family);
+                //console.log("font loaded: " + font.family);
             },
             "complete": function (error) {
                 if (error !== null) {
                     // Reached the timeout but not all fonts were loaded
-                    console.log(error.message);
-                    console.log(error.notLoadedFonts);
+                    //console.log(error.message);
+                    //console.log(error.notLoadedFonts);
                 } else {
                     // All fonts were loaded
-                    console.log("all fonts were loaded - removing preloader");
+                    //console.log("all fonts were loaded - removing preloader");
 
                     // LOADER
                     gsap.timeline().to(".preloader", {
@@ -31,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 top: 0,
                                 behavior: 'instant',
                             });
-                            
+
                             docReady = true;
                         },
                         onComplete: () => {
